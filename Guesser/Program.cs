@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Guesser
 {
@@ -9,19 +10,19 @@ namespace Guesser
             Random r = new Random();
             int secret = r.Next(1, 101);
             int tries = 0;
-            Console.WriteLine("This version uses user input");
+            //Console.WriteLine("This version uses user input");
             string response = "";
-            while (response != "Match!")
-            {
-                int num = GetUserGuess();
+            //while (response != "Match!")
+            //{
+            //    int num = GetUserGuess();
 
-                response = Guess(num, secret);
-                Console.WriteLine(response);
-                Console.WriteLine();
-                tries++;
-            }
+            //    response = Guess(num, secret);
+            //    Console.WriteLine(response);
+            //    Console.WriteLine();
+            //    tries++;
+            //}
 
-            Console.WriteLine($"it took you {tries} to guess {secret}");
+            //Console.WriteLine($"it took you {tries} to guess {secret}");
 
             Console.WriteLine();
             // Brute force
@@ -45,20 +46,44 @@ namespace Guesser
 
             Console.WriteLine();
             // Random 
-            // Best case: 1 guess
-            // Worst case: infinite guesses
+            // Best case: 1 guess (actually got it on the first guess one time)
+            // Worst case: infinite guesses (highest I got was 365)
             // Average case: 
             Console.WriteLine("This version guesses a random number between 1 and 100 every time.");
-            current = 0;
+            tries = 1;
+            current = r.Next(1, 101);
             response = "";
             while (response != "Match!")
             {
                 response = Guess(current, secret);
                 if (response != "Match!")
                 {
-
+                    current = r.Next(1, 101);
+                    tries++;
                 }
             }
+            Console.WriteLine($"The random guesser took {tries} tries to guess the number {secret}.");
+
+            Console.WriteLine();
+            // Elimination 
+            // Best case: 1 guess (actually got it on the first guess one time)
+            // Worst case: infinite guesses (highest I got was 365)
+            // Average case: 
+            Console.WriteLine("This version guesses a random number between 1 and 100 and doesn't guess numbers more than once.");
+            tries = 1;
+            current = r.Next(1, 101);
+            
+            response = "";
+            while (response != "Match!")
+            {
+                response = Guess(current, secret);
+                if (response != "Match!")
+                {
+                    current = r.Next(1, 101);
+                    tries++;
+                }
+            }
+            Console.WriteLine($"The random guesser took {tries} tries to guess the number {secret}.");
         }
 
         public static int GetUserGuess()
