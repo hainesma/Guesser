@@ -66,10 +66,17 @@ namespace Guesser
 
             Console.WriteLine();
             // Elimination 
+            // This is similar to the linear search
             // Best case: 1 guess (actually got it on the first guess one time)
-            // Worst case: infinite guesses (highest I got was 365)
-            // Average case: 
+            // Worst case: 100 guesses
+            // Average case: 50 guesses
             Console.WriteLine("This version guesses a random number between 1 and 100 and doesn't guess numbers more than once.");
+            List<int> unguessedNums = new List<int>();
+            for (int i = 1; i <= 100; i++)
+            {
+                unguessedNums.Add(i);
+            }
+
             tries = 1;
             current = r.Next(1, 101);
             
@@ -79,11 +86,13 @@ namespace Guesser
                 response = Guess(current, secret);
                 if (response != "Match!")
                 {
-                    current = r.Next(1, 101);
+                    unguessedNums.Remove(current);
+                    int randomIndex = r.Next(1, unguessedNums.Count);
+                    current = unguessedNums[randomIndex];
                     tries++;
                 }
             }
-            Console.WriteLine($"The random guesser took {tries} tries to guess the number {secret}.");
+            Console.WriteLine($"The elimination guesser took {tries} tries to guess the number {secret}.");
         }
 
         public static int GetUserGuess()
