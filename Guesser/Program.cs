@@ -10,19 +10,19 @@ namespace Guesser
             Random r = new Random();
             int secret = r.Next(1, 101);
             int tries = 0;
-            //Console.WriteLine("This version uses user input");
+            Console.WriteLine("This version uses user input");
             string response = "";
-            //while (response != "Match!")
-            //{
-            //    int num = GetUserGuess();
+            while (response != "Match!")
+            {
+                int num = GetUserGuess();
 
-            //    response = Guess(num, secret);
-            //    Console.WriteLine(response);
-            //    Console.WriteLine();
-            //    tries++;
-            //}
+                response = Guess(num, secret);
+                Console.WriteLine(response);
+                Console.WriteLine();
+                tries++;
+            }
 
-            //Console.WriteLine($"it took you {tries} to guess {secret}");
+            Console.WriteLine($"it took you {tries} to guess {secret}");
 
             Console.WriteLine();
             // Brute force
