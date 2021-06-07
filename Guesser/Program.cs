@@ -6,81 +6,124 @@ namespace Guesser
     {
         static void Main(string[] args)
         {
-            // Generate random number
-            Random rand = new Random();
-            int secretNumber = rand.Next(1, 101);
-            Console.WriteLine(secretNumber);
-
-            bool keepGuessing = true;
-            while (keepGuessing == true)
+            Random r = new Random();
+            int secret = r.Next(1, 101);
+            int tries = 0;
+            Console.WriteLine("This version uses user input");
+            string response = "";
+            while (response != "Match!")
             {
+                int num = GetUserGuess();
 
-                
-                int guess = GetInteger(secretNumber);
-                Console.WriteLine($"Your guess is {guess}.");
+                response = Guess(num, secret);
+                Console.WriteLine(response);
+                Console.WriteLine();
+                tries++;
+            }
 
-                //if (TryGuess(secretNumber, guess) == true)
-                //{
-                //    Console.WriteLine("You guessed the correct number!");
-                //    keepGuessing = false;
-                //}
-                //else
-                //{
-                //    Console.WriteLine("That number is not correct.");
-                //    guess = GetInteger();
-                //}
+            Console.WriteLine($"it took you {tries} to guess {secret}");
+
+            Console.WriteLine();
+            // Brute force
+            // Best case: 1 guess
+            // Worst case: 100 guesses
+            // Average case: 50 guesses would be the average number over many tries
+
+            Console.WriteLine("This version guesses starting at one and ticks up to 100");
+            int current = 1;
+            response = "";
+            while (response != "Match!")
+            {
+                response = Guess(current, secret);
+                if (response != "Match!")
+                {
+                    current++;
+                }
+            }
+
+            Console.WriteLine($"The linear Guesser took {current} times to guess the number {secret} ");
+
+            Console.WriteLine();
+            // Random 
+            // Best case: 1 guess
+            // Worst case: infinite guesses
+            // Average case: 
+            Console.WriteLine("This version guesses a random number between 1 and 100 every time.");
+            current = 0;
+            response = "";
+            while (response != "Match!")
+            {
+                response = Guess(current, secret);
+                if (response != "Match!")
+                {
+
+                }
             }
         }
 
-        public static int GetInteger(int target )
+        public static int GetUserGuess()
         {
-            int output = 0;
-            
-            try
+            while (true)
             {
-                Console.WriteLine("Please enter a guess 1-100.");
-                string input = Console.ReadLine();
-                output = int.Parse(input);
-                if (output < 1 || output > 100)
+                Console.WriteLine("Please guess a number between 1 and 100 and I will tell how close you are");
+                try
                 {
-                    throw new Exception("Your guess must be between 1 and 100.");
+                    int num = int.Parse(Console.ReadLine());
+                    if (num < 1)
+                    {
+                        throw new Exception("That number is too small, please input a number between 1 and 100");
+                    }
+                    else if (num > 100)
+                    {
+                        throw new Exception("That number is too large, please inptu a number between 1 and 100");
+                    }
+                    return num;
+
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("That was not a valid number please try again");
+                    continue;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    continue;
                 }
             }
-            catch (FormatException)
-            {
-                Console.WriteLine("That was not a number.");
-                output = GetInteger(target);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                output = GetInteger(target);
-            }
+        }
 
-            if (output == target)
+        public static string Guess(int guess, int secretNum)
+        {
+            if (guess == secretNum)
             {
-                Console.WriteLine("You guessed the correct number!");
-                keepGuessing = false;
+                return "Match!";
+            }
+            int diff = guess - secretNum;
+            diff = Math.Abs(diff);
+
+            if (guess > secretNum)
+            {
+                if (diff > 10)
+                {
+                    return "Way too high!";
+                }
+                else
+                {
+                    return "too high!";
+                }
             }
             else
             {
-                Console.WriteLine("That number is not correct.");
-                output = GetInteger(target);
+                if (diff > 10)
+                {
+                    return "Way too low!";
+                }
+                else
+                {
+                    return "too low!";
+                }
             }
-            return output;
-
         }
-
-        //public static bool TryGuess(int target, int guess)
-        //{
-        //    if(guess == target)
-        //    {
-        //        return true;
-        //    } else
-        //    {
-        //        return false;
-        //    }
-        //}
-
     }
 }
